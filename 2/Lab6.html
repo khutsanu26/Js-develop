@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<title>Задание 6</title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+	<script type="text/javascript">
+		var tr = 0;
+		var fa = 0;
+		function quiz1(){
+			tr = tr+1;
+		}
+
+		function quiz2(){
+		fa = fa+1;
+}
+
+		function result(){
+		var all = fa+tr;
+		var trp = Math.round((tr/all)*100);
+		var fap = 100-trp;
+		$("#a").html("Количество проголосовавших равно "+all);
+		$("#c").html("За правду проголосовало "+trp+"%");
+		$("#e").html("За ложь проголосовало "+fap+"%");
+}
+	</script>
+	<style>
+		label{
+			font: 16pt sans-serif;
+		}
+
+		.button {
+    padding: 10px;
+    text-decoration: none;
+    font-size: 14px;
+    margin: 4px 4px;
+    border-radius: 15px 5px 15px 5px;
+}
+
+		.result{
+    padding: 20px;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+		}
+	</style>
+</head>
+<body align='center'>
+	<form id="f">
+		<label>Правда ли, что Вам очень трудно отвечать "нет"?</label></br>
+		<input class="button" type="button" onclick="quiz1(),result()" id="rad1" value="Да ">
+		<input class="button" type="button" onclick="quiz2(),result()" id="rad2" value="Нет"></br></br>
+		<p id="a"></p>
+		<p id="c"></p>
+		<p id="e"></p>
+	</form>
+</body>
+</html>
