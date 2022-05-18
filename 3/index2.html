@@ -1,0 +1,128 @@
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <title>Написать отзыв о сервисе</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="stylesheet" type="text/css" href="style.css" />
+  <!--[if lte IE 6]><link rel="stylesheet" type="text/css" href="ie.css" /><![endif]-->
+  <script type="text/javascript" src="jquery.js"></script>
+</head>
+ <body> 
+<div id="wrapper">
+   <header class="head">
+        <img style="float: left;" wight="100px" hight="100px" src="http://i.otzovik.com/objects/b/300000/292561.png">
+        <h1  style="float: center;">Горящие туры</h1>
+	</header>
+	<br /><br /><br /><br /><br />  <a style="text-decoration: none;  color: black; border: 2px solid black; padding: 10px;" href="index.html">Горящие туры</a><br /><br /><br /><br /><br /><br />
+	
+  <br />
+  <h2>Написать отзыв о сервисе </h2>
+  <br />
+  <div id="content">
+
+      <div class="recent">
+
+        <div class="single">
+          <p>Оставьте отзыв</p>
+        </div>
+
+        <div id="comments">
+          <div id="respond">
+
+            <p>
+             Имя * <input type="text" name="author" id="author" value="" size="22" tabindex="1" />
+              <label for="author"></label>
+            </p>
+            
+            <p>
+            Отзыв*
+              <textarea name="comment" id="comment" cols="60" rows="10" tabindex="4"></textarea>
+            </p>
+            <p>
+            email*
+              <input type="text" name="email" id="email" value="" size="22" tabindex="1" />
+              <label for="email"></label>
+            </p>
+            <p>
+           <input id="datepub" type="hidden" value="2022-05-20">
+            </p>
+            
+            <p>
+              <button id="confirm">Отправить</button>
+            </p>
+
+          </div>
+        </div>
+        <div id="comments">
+          <input id="msgid" type="hidden">
+        </div>
+      </div>
+    </div>
+</div>
+</body>
+</html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $('#msgid').val(0);
+    /* $('#try').on('click',); */
+    load();
+
+    function load() {
+      $.ajax({
+        type: 'POST',
+        url: 'loadMessageData.php',
+        dataType: "json",
+        /*data:{tek:tek, kol:kol},*/
+        success: function (data) {
+          if (data.length > parseInt($('#msgid').val())) {
+            for (var i = parseInt($('#msgid').val()); i < data.length; i++) {
+              $('#comments').append('<div class="msg">Имя: ' + data[i].name +'</div>Отзыв:' + data[i].msg +
+                '<p  align="right">' + data[i].email + '<br>'+ data[i].datepub +'</p></div><hr>');
+            }
+            $('#msgid').val(data.length);
+          }
+        }
+      });
+    };
+
+    $('#confirm').on('click', function () {
+      var checker = true;
+      var name = $('#author').val();
+      var msg = $('#comment').val();
+      var email = $('#email').val();
+      var datepub = $('#datepub').val();
+      if ($('#author').val() == '' || $('#author').val().length < 4) {
+        checker = false;
+      }
+      if ($('#comment').val() == '' || $('#comment').val().length < 5) {
+        checker = false;
+      }
+      if (checker == true) {
+        $.ajax({
+          type: 'POST',
+          url: 'saveMessage.php',
+          data: {
+            name: name,
+            msg: msg,
+            email: email,
+            datepub: datepub
+          },
+          success: function () {
+            load()
+            $('#author').val('')
+            $('#comment').val('')
+            $('#email').val('')
+            $('#datepub').val('')
+            alert("Отзыв добавлен!");
+          }
+
+        });
+      } else {
+        alert("Отзыв не отправлен, проверьте правильность ввода полей!");
+      }
+    });
+  });
+</script>
